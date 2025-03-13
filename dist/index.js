@@ -146,7 +146,9 @@ var PostgresDatabaseAdapter = class extends DatabaseAdapter {
     try {
       await client.query("BEGIN");
       const embeddingConfig = getEmbeddingConfig();
+      elizaLogger.log("getEmbeddingConfig():", embeddingConfig);
       if (embeddingConfig.provider === EmbeddingProvider.OpenAI) {
+        elizaLogger.log("Setting app.use_openai_embedding = 'true'");
         await client.query("SET app.use_openai_embedding = 'true'");
         await client.query("SET app.use_ollama_embedding = 'false'");
         await client.query("SET app.use_gaianet_embedding = 'false'");
@@ -180,6 +182,7 @@ var PostgresDatabaseAdapter = class extends DatabaseAdapter {
       }
       await client.query("COMMIT");
     } catch (error) {
+      elizaLogger.error("Error initing database:", error);
       await client.query("ROLLBACK");
       throw error;
     } finally {

@@ -217,7 +217,9 @@ class PostgresDatabaseAdapter
 
             // Set application settings for embedding dimension
             const embeddingConfig = getEmbeddingConfig();
+            elizaLogger.log("getEmbeddingConfig():", embeddingConfig);
             if (embeddingConfig.provider === EmbeddingProvider.OpenAI) {
+                elizaLogger.log("Setting app.use_openai_embedding = 'true'");
                 await client.query("SET app.use_openai_embedding = 'true'");
                 await client.query("SET app.use_ollama_embedding = 'false'");
                 await client.query("SET app.use_gaianet_embedding = 'false'");
@@ -255,6 +257,7 @@ class PostgresDatabaseAdapter
 
             await client.query("COMMIT");
         } catch (error) {
+            elizaLogger.error("Error initing database:", error);
             await client.query("ROLLBACK");
             throw error;
         } finally {
