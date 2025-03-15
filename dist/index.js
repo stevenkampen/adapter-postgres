@@ -1417,6 +1417,7 @@ var postgresPlugin = {
 };
 var index_default = postgresPlugin;
 export {
+  PostgresDatabaseAdapter,
   index_default as default
 };
 //# sourceMappingURL=index.js.map
